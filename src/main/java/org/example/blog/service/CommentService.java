@@ -60,6 +60,9 @@ public class CommentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Comment not found"));
+        if(!comment.getPost().getId().equals(post.getId())) {
+            throw new ResourceNotFoundException("Comment does not belong to the specified post");
+        }
         comment.setContent(commentDto.getContent());
         comment.setPost(post);
         return CommentMapper.toDto(commentRepository.save(comment));
